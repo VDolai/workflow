@@ -1,5 +1,7 @@
 var gulp = require('gulp'),
 	gutil = require('gulp-util'),
+	gulpif = require('gulp-if'),
+	uglify = require('gulp-uglify'),
 	coffee = require('gulp-coffee'),
 	browserify = require('gulp-browserify'),
 	compass = require('gulp-compass'),
@@ -16,7 +18,7 @@ var env,
 	sassStyle;
 
 
-env = process.env.NODE_ENV || 'development';
+env = process.env.NODE_ENV || 'production';
 
 
 if (env==='development') {
@@ -51,6 +53,7 @@ gulp.task('js', function() {
 	gulp.src(jsSources)
 		.pipe(concat('script.js'))
 		.pipe(browserify())
+		.pipe(gulpif(env === 'production', uglify()))
 		.pipe(gulp.dest(outputDir +'js'))
 		.pipe(connect.reload())
 });
